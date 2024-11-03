@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@gnosis-guild/zodiac": "^4.0.3"
+  }
+}
