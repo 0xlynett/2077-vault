@@ -1,0 +1,4 @@
+forge-std/=node_modules/forge-std/src/
+@gnosis-guild/=node_modules/@gnosis-guild/
+solady/=node_modules/solady/src/
+@safe-global/safe-smart-account/=node_modules/@safe-global/safe-smart-account/
