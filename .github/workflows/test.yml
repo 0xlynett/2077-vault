@@ -20,6 +20,12 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Bun install
+        run: bun install
+
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
