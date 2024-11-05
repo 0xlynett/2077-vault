@@ -9,12 +9,9 @@ contract DeployScript is Script {
 
     function run() public {
         vm.startBroadcast();
-
         address safe = 0x825001aC81d9348F71f2dADd717335aC0AB4a9FE;
-
         address r = address(new Rescue(msg.sender, safe, safe));
-        console.log(r);
-
         vm.stopBroadcast();
+        console.log(r);
     }
 }
