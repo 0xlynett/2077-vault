@@ -2,17 +2,18 @@
 pragma solidity ^0.8.13;
 
 import {Script, console} from "forge-std/Script.sol";
-import {Counter} from "../src/Counter.sol";
+import {Rescue} from "src/Rescue.sol";
 
-contract CounterScript is Script {
-    Counter public counter;
-
+contract DeployScript is Script {
     function setUp() public {}
 
     function run() public {
         vm.startBroadcast();
 
-        counter = new Counter();
+        address safe = 0x825001aC81d9348F71f2dADd717335aC0AB4a9FE;
+
+        address r = address(new Rescue(msg.sender, safe, safe));
+        console.log(r);
 
         vm.stopBroadcast();
     }

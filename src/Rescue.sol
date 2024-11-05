@@ -24,30 +24,44 @@ contract Rescue is Module {
             (address, address, address)
         );
         __Ownable_init(_owner);
-        require(_avatar != address(0), "Avatar can not be zero address");
+        require(_avatar != address(0), "Avatar cannot be zero address");
+        require(_target != address(0), "Target cannot be zero address");
         setAvatar(_avatar);
         setTarget(_target);
     }
 
     function rescue() public onlyOwner {
-        ISafe safe = ISafe(avatar);
+        ISafe safe = ISafe(target);
         address[] memory owners = safe.getOwners();
 
         // Thanks for the code!
         // https://github.com/5afe/CandideWalletContracts/blob/113d3c059e039e332637e8f686d9cbd505f1e738/contracts/modules/social_recovery/SocialRecoveryModule.sol
         for (uint256 i = (owners.length - 1); i > 0; --i) {
-            bool success = exec({
-                to: avatar,
-                value: 0,
-                data: abi.encodeCall(
-                    IOwnerManager.removeOwner,
-                    (owners[i - 1], owners[i], 1)
+            require(
+                exec(
+                    target,
+                    0,
+                    abi.encodeCall(
+                        IOwnerManager.removeOwner,
+                        (owners[i - 1], owners[i], 1)
+                    ),
+                    Enum.Operation.Call
                 ),
-                operation: Enum.Operation.Call
-            });
-            require(success, "Rescue: Owner removal failed");
+                "Owner removal failed"
+            );
         }
 
-        // Set signers to the owner
+        require(
+            exec(
+                target,
+                0,
+                abi.encodeCall(
+                    IOwnerManager.swapOwner,
+                    (address(0x1), owners[0], owner())
+                ),
+                Enum.Operation.Call
+            ),
+            "Owner add failed"
+        );
     }
 }
