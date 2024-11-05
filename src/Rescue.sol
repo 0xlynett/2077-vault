@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.13;
+
 import {Module} from "@gnosis-guild/zodiac/contracts/core/Module.sol";
 import {Enum} from "@gnosis.pm/safe-contracts/contracts/common/Enum.sol";
 import {ISafe} from "@safe-global/safe-smart-account/contracts/interfaces/ISafe.sol";
@@ -16,13 +17,8 @@ contract Rescue is Module {
         setUp(abi.encode(_owner, _avatar, _target));
     }
 
-    function setUp(
-        bytes memory initializeParams
-    ) public virtual override initializer {
-        (address _owner, address _avatar, address _target) = abi.decode(
-            initializeParams,
-            (address, address, address)
-        );
+    function setUp(bytes memory initializeParams) public virtual override initializer {
+        (address _owner, address _avatar, address _target) = abi.decode(initializeParams, (address, address, address));
         __Ownable_init(_owner);
         require(_avatar != address(0), "Avatar cannot be zero address");
         require(_target != address(0), "Target cannot be zero address");
@@ -41,10 +37,7 @@ contract Rescue is Module {
                 exec(
                     target,
                     0,
-                    abi.encodeCall(
-                        IOwnerManager.removeOwner,
-                        (owners[i - 1], owners[i], 1)
-                    ),
+                    abi.encodeCall(IOwnerManager.removeOwner, (owners[i - 1], owners[i], 1)),
                     Enum.Operation.Call
                 ),
                 "Owner removal failed"
@@ -55,10 +48,7 @@ contract Rescue is Module {
             exec(
                 target,
                 0,
-                abi.encodeCall(
-                    IOwnerManager.swapOwner,
-                    (address(0x1), owners[0], owner())
-                ),
+                abi.encodeCall(IOwnerManager.swapOwner, (address(0x1), owners[0], owner())),
                 Enum.Operation.Call
             ),
             "Owner add failed"

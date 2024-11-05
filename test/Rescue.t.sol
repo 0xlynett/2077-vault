@@ -8,16 +8,13 @@ import {ISafe} from "@safe-global/safe-smart-account/contracts/interfaces/ISafe.
 
 contract CounterTest is Test, SafeTestTools {
     using SafeTestLib for SafeInstance;
+
     Rescue public rescue;
     SafeInstance public safeInstance;
 
     function setUp() public {
         safeInstance = _setupSafe();
-        rescue = new Rescue(
-            address(this),
-            address(safeInstance.safe),
-            address(safeInstance.safe)
-        );
+        rescue = new Rescue(address(this), address(safeInstance.safe), address(safeInstance.safe));
         safeInstance.enableModule(address(rescue));
     }
 
